@@ -1,0 +1,24 @@
+﻿@page "/cart"
+@inject Cart CartService
+
+<h3>Shopping Cart</h3>
+
+@foreach (var item in CartService.GetCart())
+{
+    <div class="cart-item">
+        <h4>@item.Product.Name</h4>
+        <p>Quantity: @item.Quantity</p>
+        <p>Total Price: $@(item.Quantity * item.Product.Price)</p>
+    </div>
+}
+@inject HttpClient HttpClient
+@code {
+    private List<Product> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await HttpClient.GetFromJsonAsync<List<Product>>("https://localhost:5001/api/product");
+    }
+
+ 
+}

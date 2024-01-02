@@ -1,0 +1,33 @@
+﻿@page "/"
+@inject ProductService ProductService
+@inject CartService CartService
+
+<h3>Welcome to our E-Commerce Store</h3>
+
+@foreach (var product in ProductService.GetProducts())
+{
+    <div class="product-card">
+        <h4>@product.Name</h4>
+        <p>@product.Description</p>
+        <p>Price: $@product.Price</p>
+        <button @onclick="() => AddToCart(product)">Add to Cart</button>
+    </div>
+}
+
+@code {
+    private void AddToCart(Product product)
+    {
+        CartService.AddToCart(product);
+    }
+}
+@inject HttpClient HttpClient
+@code {
+    private List<Product> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await HttpClient.GetFromJsonAsync<List<Product>>("https://localhost:5001/api/product");
+    }
+
+   
+}
